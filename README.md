@@ -52,6 +52,8 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 ```
 project-dependency，主要是依赖关联
 
+git clone https://github.com/wuda0112/project-dependency/
+
 mvn clean install  // 安装到本地maven仓库
 ```
 - [project-dependency](https://github.com/wuda0112/project-dependency/)
@@ -60,6 +62,8 @@ mvn clean install  // 安装到本地maven仓库
 ```
 yhan-base，基础工具类
 
+git clone https://github.com/wuda0112/yhan-base/
+
 mvn clean install  // 安装到本地maven仓库
 ```
 - [yhan-base](https://github.com/wuda0112/yhan-base/)
@@ -67,6 +71,8 @@ mvn clean install  // 安装到本地maven仓库
 
 ```
 yhan-code-generator，Mybatis代码自动生成,比如实体，mapper
+
+git clone https://github.com/wuda0112/yhan-code-generator/
 
 mvn clean install  // 安装到本地maven仓库
 ```

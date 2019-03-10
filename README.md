@@ -12,13 +12,13 @@
 
 ```
 下载可执行jar包,下载链接
-[jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 ```
+- [jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
 生成数据库表,sql脚本查看
-[脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
 ```
+- [脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
 
 ```
 输入命令，启动.默认连接到本地mysql,即: localhost:3306
@@ -51,29 +51,27 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 
 ```
 project-dependency，主要是依赖关联
-[link](https://github.com/wuda0112/project-dependency/)
 
 mvn clean install  // 安装到本地maven仓库
 ```
+- [project-dependency](https://github.com/wuda0112/project-dependency/)
 
 
 ```
 yhan-base，基础工具类
-[link](https://github.com/wuda0112/yhan-base/)
 
 mvn clean install  // 安装到本地maven仓库
 ```
+- [yhan-base](https://github.com/wuda0112/yhan-base/)
 
 
 ```
 yhan-code-generator，Mybatis代码自动生成,比如实体，mapper
-[link](https://github.com/wuda0112/yhan-code-generator/)
 
 mvn clean install  // 安装到本地maven仓库
 ```
+- [yhan-code-generator](https://github.com/wuda0112/yhan-code-generator/)
+
 
 以上完成后，就可以克隆本项目了！
-
-
-
 

@@ -35,6 +35,7 @@ public class Bootstrap {
     public static void main(String[] args) {
         // 解析命令行参数
         CliArgs cliArgs = CliOptionUtils.parser(CliOptionUtils.getOptions(), args);
+        cliArgs.validate();
         // spring boot
         ConfigurableApplicationContext context = SpringApplication.run(Bootstrap.class, args);
         SpringApplicationContextHolder.setApplicationContext(context);

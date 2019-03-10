@@ -92,13 +92,14 @@ public class CliOptionUtils {
         } catch (Exception e) {
             // 因为本来就是java命令启动的程序,还有很多其他java自身的选项,
             // 最坏情况就是不识别的选项不处理而已
+            HelpFormatter helpFormatter = new HelpFormatter();
             if (!e.getClass().equals(org.apache.commons.cli.UnrecognizedOptionException.class)) {
-                HelpFormatter helpFormatter = new HelpFormatter();
                 helpFormatter.printHelp(cmdLineSyntax, options);
                 System.out.println("\n命令行参数解析异常," + e.getMessage());
                 exit0();
             } else {
-                logger.debug(e.getMessage(), e);
+                helpFormatter.printHelp(cmdLineSyntax, options);
+                logger.warn(e.getMessage(), e);
             }
         }
         return cliArgs;

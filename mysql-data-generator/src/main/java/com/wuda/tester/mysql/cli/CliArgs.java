@@ -2,6 +2,9 @@ package com.wuda.tester.mysql.cli;
 
 import lombok.Data;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 命令行接口输入的参数生成的实体.方便程序后续调用.
@@ -11,6 +14,11 @@ import lombok.ToString;
 @Data
 @ToString
 public class CliArgs {
+
+    /**
+     * logger.
+     */
+    private Logger logger = LoggerFactory.getLogger(CliArgs.class);
 
     final static String HELP = "help";
     final static String HELP_DESC = "print this help message";
@@ -41,7 +49,7 @@ public class CliArgs {
 
     final static String USER_COUNT = "user-count";
     final static int USER_COUNT_DEFAULT = 10000;
-    final static String USER_COUNT_DESC = "用户表生成多少行记录,同时也是店铺表的记录数,因为一个用户只拥有一个店铺" +
+    final static String USER_COUNT_DESC = "用户表生成多少行记录,同时也是店铺表和仓库表的记录数,因为一个用户只拥有一个店铺和一个仓库" +
             "(default=" + USER_COUNT_DEFAULT + ")" +
             ",当生成的记录数达到该值时,数据生成任务结束";
     private int userCount = USER_COUNT_DEFAULT;
@@ -53,6 +61,18 @@ public class CliArgs {
             "比如默认生成" + USER_COUNT_DEFAULT + "个用户,每个用户最多" + MAX_ITEM_PER_USER_DEFAULT + "个商品," +
             "那么大致就可以知道生成的数据规模";
     private int maxItemPerUser = MAX_ITEM_PER_USER_DEFAULT;
+
+    /**
+     * 自我校验.
+     */
+    public void validate() {
+        if (StringUtils.isBlank(getMysqlUsername())) {
+            logger.warn("没有指定数据库用户名");
+        }
+        if (StringUtils.isBlank(getMysqlPassword())) {
+            logger.warn("没有指定数据库密码");
+        }
+    }
 
 
 }

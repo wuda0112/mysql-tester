@@ -1,6 +1,7 @@
 package com.wuda.tester.mysql.config;
 
 import com.wuda.tester.mysql.cli.CliArgs;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.jdbc.pool.PoolConfiguration;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +21,6 @@ public class DatabaseConfiguration {
     public DataSource getDataSource() {
         PoolConfiguration poolProperties = new PoolProperties();
         poolProperties.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        poolProperties.setUrl("jdbc:mysql://localhost:3306/?serverTimezone=UTC ");
-        poolProperties.setUsername("wuda0112");
-        poolProperties.setPassword("123456");
         return new org.apache.tomcat.jdbc.pool.DataSource(poolProperties);
     }
 
@@ -35,6 +33,12 @@ public class DatabaseConfiguration {
     public static void applyArgs(DataSource dataSource, CliArgs cliArgs) {
         org.apache.tomcat.jdbc.pool.DataSource tomcatDataSource = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
         tomcatDataSource.setUrl(cliArgs.getMysqlUrl());
+        if (StringUtils.isNoneBlank(cliArgs.getMysqlUsername())) {
+            tomcatDataSource.setUsername(cliArgs.getMysqlUsername());
+        }
+        if (StringUtils.isNoneBlank(cliArgs.getMysqlPassword())) {
+            tomcatDataSource.setPassword(cliArgs.getMysqlPassword());
+        }
         tomcatDataSource.setMaxActive(cliArgs.getMysqlMaxConnection());
     }
 }

@@ -11,6 +11,10 @@
 # 快速开始
 
 ```
+安装java JDK , java版本 >= 1.8
+```
+
+```
 下载可执行jar包
 ```
 - [jar下载](https://github.com/wuda0112/mysql-tester/releases/)

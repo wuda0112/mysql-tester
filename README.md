@@ -30,7 +30,7 @@
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
 ```
 
-# 支持的选项
+# 支持的参数(必须放在mysql-tester-${VERSION}.jar后面)
 
 ```
     --max-item-per-user <arg>
@@ -54,7 +54,7 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 由于依赖了其他项目，但是这些项目又没有发布的maven仓库，因此必须首先将这些项目下载，然后安装到本地maven仓库。按照顺序有
 
 ```
-project-dependency，主要是依赖关联
+project-dependency，管理项目依赖
 
 git clone https://github.com/wuda0112/project-dependency/
 

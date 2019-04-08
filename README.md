@@ -56,11 +56,11 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 ```
 project-dependency，管理项目依赖
 
-git clone https://github.com/wuda0112/project-dependency/
+git clone https://github.com/wuda0112/yhan-spring-boot-based-parent/
 
 mvn clean install  // 安装到本地maven仓库
 ```
-- [project-dependency](https://github.com/wuda0112/project-dependency/)
+- [yhan-spring-boot-based-parent](https://github.com/wuda0112/yhan-spring-boot-based-parent/)
 
 
 ```

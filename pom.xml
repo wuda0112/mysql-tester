@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.wuda</groupId>
-        <artifactId>project-dependency</artifactId>
-        <version>1.0.1</version>
+        <groupId>io.github.wuda0112</groupId>
+        <artifactId>yhan-spring-boot-based-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>mysql-tester</artifactId>
@@ -14,10 +14,28 @@
     <packaging>pom</packaging>
 
     <name>mysql-tester</name>
-    <url>http://maven.apache.org</url>
+
+    <licenses>
+        <license>
+            <name>Apache Software License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/wuda0112/mysql-tester</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>wuda</name>
+            <email>wuda0112@gmail.com</email>
+        </developer>
+    </developers>
 
     <properties>
-        <yhan.code.generator.version>1.0.0</yhan.code.generator.version>
+        <yhan.code.generator.version>1.0.0-SNAPSHOT</yhan.code.generator.version>
     </properties>
 
     <modules>
@@ -26,7 +44,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.wuda</groupId>
+            <groupId>io.github.wuda0112</groupId>
             <artifactId>yhan-code-generator-lang</artifactId>
             <version>${yhan.code.generator.version}</version>
         </dependency>

@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.wuda</groupId>
+        <groupId>io.github.wuda0112</groupId>
         <artifactId>mysql-tester</artifactId>
         <version>1.0.0</version>
     </parent>

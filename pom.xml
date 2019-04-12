@@ -25,6 +25,8 @@
 
     <scm>
         <url>https://github.com/wuda0112/mysql-tester</url>
+        <connection>scm:git:git@github.com:wuda0112/mysql-tester.git</connection>
+        <developerConnection>scm:git:git@github.com:wuda0112/mysql-tester.git</developerConnection>
     </scm>
 
     <developers>

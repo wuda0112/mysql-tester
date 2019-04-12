@@ -11,23 +11,29 @@
 # 快速开始
 
 ```
-安装java JDK , java版本 >= 1.8
+1. 安装Java JDK, Java版本 >= 1.8
 ```
 
 ```
-下载可执行jar包
+2. 下载可执行jar文件
 ```
 - [jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
-生成数据库表,sql脚本如下
+3. 生成数据库表,sql脚本如下
 ```
-- [脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
+- [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
 
 ```
-输入命令，启动。默认连接到本地mysql，即: localhost:3306
+4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306
 
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
+```
+
+# clone项目
+```aidl
+1. 启动类: com.wuda.tester.mysql.Bootstrap
+2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库
 ```
 
 # 支持的参数(必须放在mysql-tester-${VERSION}.jar后面)

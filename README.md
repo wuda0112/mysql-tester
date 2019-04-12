@@ -1,5 +1,3 @@
-正在整理依赖，为发布到中央仓库做准备，所以，现在clone会有问题，可以先下载已经打好的Jar包执行
-
 # 简介
 - 生成测试数据，总共有4个表，包括用户表(individual_user)，店铺表(shop)，仓库表(warehouse)，商品表(item)。生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join语句。
 - 用于数据库压力测试
@@ -51,39 +49,4 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
                                    铺和一个仓库(default=10000),当生成的记录数达到该值时,数据生成
                                    任务结束
 ```
-
-# 克隆项目须知
-由于依赖了其他项目，但是这些项目又没有发布的maven仓库，因此必须首先将这些项目下载，然后安装到本地maven仓库。按照顺序有
-
-```
-project-dependency，管理项目依赖
-
-git clone https://github.com/wuda0112/yhan-spring-boot-based-parent/
-
-mvn clean install  // 安装到本地maven仓库
-```
-- [yhan-spring-boot-based-parent](https://github.com/wuda0112/yhan-spring-boot-based-parent/)
-
-
-```
-yhan-base，基础工具类
-
-git clone https://github.com/wuda0112/yhan-base/
-
-mvn clean install  // 安装到本地maven仓库
-```
-- [yhan-base](https://github.com/wuda0112/yhan-base/)
-
-
-```
-yhan-code-generator，Mybatis代码自动生成,比如实体，mapper
-
-git clone https://github.com/wuda0112/yhan-code-generator/
-
-mvn clean install  // 安装到本地maven仓库
-```
-- [yhan-code-generator](https://github.com/wuda0112/yhan-code-generator/)
-
-
-以上完成后，就可以克隆本项目了！
 

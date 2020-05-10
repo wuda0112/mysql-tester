@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>mysql-tester</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
 
     <name>mysql-tester</name>
@@ -25,7 +25,7 @@
         <url>https://github.com/wuda0112/mysql-tester</url>
         <connection>scm:git:git@github.com:wuda0112/mysql-tester.git</connection>
         <developerConnection>scm:git:git@github.com:wuda0112/mysql-tester.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>release-1.0.3</tag>
   </scm>
 
     <developers>

@@ -150,7 +150,7 @@ public class DataGenerator {
     protected void afterInsert(List<TableInsertion> insertions) {
         for (TableInsertion insertion : insertions) {
             TableName tableName = insertion.getTableName();
-            int count = insertion.getValues();
+            int count = insertion.getValuesCount();
             count = dataGenerateStat.insertedIncrementAndGet(tableName, count);
             logger.info("table={},数据量={}", tableName, count);
         }

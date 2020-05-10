@@ -17,15 +17,15 @@ public class TableInsertion {
     /**
      * 表中插入的数据量.估计值.
      */
-    private int values;
+    private int valuesCount;
 
     /**
      * 累加数据量.
      *
      * @param increment 数据增量
      */
-    public void incValues(int increment) {
-        values += increment;
+    public void incrementValuesCount(int increment) {
+        valuesCount += increment;
     }
 
     /**

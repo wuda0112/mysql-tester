@@ -249,27 +249,27 @@ public class DataFactory {
         TableInsertion itemDescriptionInsertion = itemDescriptionInsertion();
 
         List<Long> userIds = userValues(CliArgs.BATCH_SIZE_DEFAULT, (InsertValuesStep8) userInsertion.getInsertReturningStep());
-        userInsertion.incValues(userIds.size());
+        userInsertion.incrementValuesCount(userIds.size());
 
         individualUserGeneralValues(userIds, (InsertValuesStep10) individualUserGeneralInsertion.getInsertReturningStep());
-        individualUserGeneralInsertion.incValues(userIds.size());
+        individualUserGeneralInsertion.incrementValuesCount(userIds.size());
 
         for (Long userId : userIds) {
             List<Long> storeIds = storeValues(userId, 1, (InsertValuesStep9) storeInsertion.getInsertReturningStep());
-            storeInsertion.incValues(storeIds.size());
+            storeInsertion.incrementValuesCount(storeIds.size());
 
             storeGeneralValues(storeIds, (InsertValuesStep8) storeGeneralInsertion.getInsertReturningStep());
-            storeGeneralInsertion.incValues(storeIds.size());
+            storeGeneralInsertion.incrementValuesCount(storeIds.size());
 
             for (Long storeId : storeIds) {
                 List<Long> itemIds = itemValues(storeId, cliArgs.getMaxItemPerUser(), (InsertValuesStep8) itemInsertion.getInsertReturningStep());
-                itemInsertion.incValues(itemIds.size());
+                itemInsertion.incrementValuesCount(itemIds.size());
 
                 itemGeneralValues(itemIds, (InsertValuesStep9) itemGeneralInsertion.getInsertReturningStep());
-                itemGeneralInsertion.incValues(itemIds.size());
+                itemGeneralInsertion.incrementValuesCount(itemIds.size());
 
                 itemDescriptionValues(itemIds, (InsertValuesStep9) itemDescriptionInsertion.getInsertReturningStep());
-                itemDescriptionInsertion.incValues(itemIds.size());
+                itemDescriptionInsertion.incrementValuesCount(itemIds.size());
             }
         }
 

@@ -36,7 +36,7 @@
 - [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
 
 ```
-4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306
+4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306，最简单的就是
 
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
 ```

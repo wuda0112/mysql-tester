@@ -95,15 +95,15 @@ public class DataFactory {
     /**
      * 生成用户.
      *
-     * @param quantity 生成的用户的数量
+     * @param count    生成的用户的数量
      * @param appender 用于追加values
      * @return 用户id
      */
-    public List<Long> userValues(int quantity, InsertValuesStep8 appender) {
-        if (quantity < 0) {
+    private List<Long> userValues(int count, InsertValuesStep8 appender) {
+        if (count < 0) {
             throw new IllegalStateException("生成的用户的数量不能小于0");
         }
-        long[] userIds = keyGeneratorSnowflake.next(quantity);
+        long[] userIds = keyGeneratorSnowflake.next(count);
 
         for (long userId : userIds) {
             Date now = new Date();
@@ -112,6 +112,12 @@ public class DataFactory {
         return asList(userIds);
     }
 
+    /**
+     * arrty to list
+     *
+     * @param array array
+     * @return list
+     */
     private List<Long> asList(long[] array) {
         List<Long> list = new ArrayList<>(array.length);
         for (long v : array) {
@@ -126,7 +132,7 @@ public class DataFactory {
      * @param userIds  用户id
      * @param appender 用于追加values
      */
-    public void individualUserGeneralValues(List<Long> userIds, InsertValuesStep10 appender) {
+    private void individualUserGeneralValues(List<Long> userIds, InsertValuesStep10 appender) {
         long[] individualUserGeneralIds = keyGeneratorSnowflake.next(userIds.size());
         Date now = new Date();
         for (int i = 0; i < userIds.size(); i++) {
@@ -140,17 +146,17 @@ public class DataFactory {
      * 为给定的用户生成店铺.
      *
      * @param userId   用户id
-     * @param quantity 生成的店铺的数量
+     * @param count    生成的店铺的数量
      * @param appender 用于追加values
      * @return 店铺id
      */
-    public List<Long> storeValues(long userId, int quantity, InsertValuesStep9 appender) {
-        if (quantity < 0) {
+    private List<Long> storeValues(long userId, int count, InsertValuesStep9 appender) {
+        if (count < 0) {
             throw new IllegalStateException("生成的店铺的数量不能小于0");
         }
-        List<Long> storeIds = new ArrayList<>(quantity);
+        List<Long> storeIds = new ArrayList<>(count);
 
-        for (int i = 0; i < quantity; i++) {
+        for (int i = 0; i < count; i++) {
             Date now = new Date();
             long storeId = keyGeneratorSnowflake.next();
             storeIds.add(storeId);
@@ -165,7 +171,7 @@ public class DataFactory {
      * @param storeIds 店铺id
      * @param appender 用于追加values
      */
-    public void storeGeneralValues(List<Long> storeIds, InsertValuesStep8 appender) {
+    private void storeGeneralValues(List<Long> storeIds, InsertValuesStep8 appender) {
         for (Long storeId : storeIds) {
             Date now = new Date();
             long storeGeneralId = keyGeneratorSnowflake.next();
@@ -181,7 +187,7 @@ public class DataFactory {
      * @param appender 用于追加values
      * @return item id
      */
-    public List<Long> itemValues(long storeId, int quantity, InsertValuesStep8 appender) {
+    private List<Long> itemValues(long storeId, int quantity, InsertValuesStep8 appender) {
         if (quantity < 0) {
             throw new IllegalStateException("生成的item的数量不能小于0");
         }
@@ -200,7 +206,7 @@ public class DataFactory {
      * @param itemIds  item id
      * @param appender 用于追加values
      */
-    public void itemGeneralValues(List<Long> itemIds, InsertValuesStep9 appender) {
+    private void itemGeneralValues(List<Long> itemIds, InsertValuesStep9 appender) {
         long[] itemGeneralIds = keyGeneratorSnowflake.next(itemIds.size());
         Date now = new Date();
         long itemVariationId = 0;
@@ -217,7 +223,7 @@ public class DataFactory {
      * @param itemIds  item id
      * @param appender 用于追加values
      */
-    public void itemDescriptionValues(List<Long> itemIds, InsertValuesStep9 appender) {
+    private void itemDescriptionValues(List<Long> itemIds, InsertValuesStep9 appender) {
         long[] itemDescriptionIds = keyGeneratorSnowflake.next(itemIds.size());
         Date now = new Date();
         long itemVariationId = 0;
@@ -228,6 +234,11 @@ public class DataFactory {
         }
     }
 
+    /**
+     * 获取每个表生成数据的定义,使用持有的{@link org.jooq.InsertReturningStep}就可以执行insert into 语句.
+     *
+     * @return 为每个表生成数据的定义
+     */
     public List<TableInsertion> getInsertions() {
         TableInsertion userInsertion = userInsertion();
         TableInsertion individualUserGeneralInsertion = individualUserGeneralInsertion();

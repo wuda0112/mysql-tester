@@ -62,7 +62,7 @@
                                 <driver>com.mysql.jdbc.Driver</driver>
                                 <url>jdbc:mysql://localhost:3306/mysql_tester?serverTimezone=UTC</url>
                                 <username>root</username>
-                                <password>wqd520lj</password>
+                                <password>password</password>
                             </jdbc>
 
                             <generator>

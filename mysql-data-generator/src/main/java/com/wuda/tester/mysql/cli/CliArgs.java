@@ -81,10 +81,12 @@ public class CliArgs {
      */
     public void validate() {
         if (StringUtils.isBlank(getMysqlUsername())) {
-            logger.warn("没有指定数据库用户名");
+            logger.warn("没有指定数据库用户名,在命令行参数中,使用--" + MYSQL_USERNAME + "设置");
+            System.exit(0);
         }
         if (StringUtils.isBlank(getMysqlPassword())) {
-            logger.warn("没有指定数据库密码");
+            logger.warn("没有指定数据库密码,在命令行参数中,使用--" + MYSQL_PASSWORD + "设置");
+            System.exit(0);
         }
     }
 

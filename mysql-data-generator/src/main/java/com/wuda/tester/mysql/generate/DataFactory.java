@@ -47,22 +47,47 @@ public class DataFactory {
         this.cliArgs = cliArgs;
     }
 
+    /**
+     * 随机生成店铺类型.
+     *
+     * @return 店铺类型
+     */
     private byte genStoreType() {
         return (byte) RandomUtils.nextInt(1, 6);
     }
 
+    /**
+     * 随机生成店铺状态
+     *
+     * @return 店铺状态
+     */
     private byte genStoreStatus() {
         return (byte) RandomUtils.nextInt(1, 10);
     }
 
+    /**
+     * 随机生成用户类型.
+     *
+     * @return 用户类型
+     */
     private byte genUserType() {
         return (byte) RandomUtils.nextInt(1, 6);
     }
 
+    /**
+     * 随机生成用户状态
+     *
+     * @return 用户状态
+     */
     private byte genUserStatus() {
         return (byte) RandomUtils.nextInt(1, 10);
     }
 
+    /**
+     * 随机生成物品状态
+     *
+     * @return 物品状态
+     */
     private byte genItemStatus() {
         return (byte) RandomUtils.nextInt(1, 10);
     }

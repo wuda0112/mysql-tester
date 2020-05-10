@@ -61,6 +61,20 @@ public class CliArgs {
             "比如默认生成" + USER_COUNT_DEFAULT + "个用户,每个用户最多" + MAX_ITEM_PER_USER_DEFAULT + "个商品," +
             "那么大致就可以知道生成的数据规模";
     private int maxItemPerUser = MAX_ITEM_PER_USER_DEFAULT;
+    private int maxItemPerUserExceed = 20;
+
+    final static String BATCH_SIZE = "batch-size";
+    public final static int BATCH_SIZE_DEFAULT = 100;
+    final static String BATCH_SIZE_DESC = "每个线程一次性批量生成的用户数.为了提高生成数据的性能,使用\n" +
+            "     \n" +
+            "     insert into table\n" +
+            "                (column)\n" +
+            "          values(a),\n" +
+            "           `    (b),\n" +
+            "                (c);\n" +
+            "     这样的语法,这个值就表示value的数量." +
+            "(default=" + BATCH_SIZE_DEFAULT + ")";
+    private int batchSize = BATCH_SIZE_DEFAULT;
 
     /**
      * 自我校验.

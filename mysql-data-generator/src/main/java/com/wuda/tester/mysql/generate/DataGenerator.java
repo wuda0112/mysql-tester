@@ -1,10 +1,10 @@
 package com.wuda.tester.mysql.generate;
 
-import com.wuda.tester.mysql.orm.ObjectRelationalMapper;
-import com.wuda.tester.mysql.repository.MysqlRepository;
-import com.wuda.tester.mysql.repository.OneTableOperation;
+import com.wuda.tester.mysql.SpringApplicationContextHolder;
+import com.wuda.tester.mysql.TableInsertion;
+import com.wuda.tester.mysql.TableName;
+import com.wuda.tester.mysql.cli.CliArgs;
 import com.wuda.tester.mysql.statistic.DataGenerateStat;
-import com.wuda.yhan.code.generator.lang.TableEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,14 +44,8 @@ public class DataGenerator {
      * thread factory.
      */
     private static DefaultThreadFactory threadFactory = new DefaultThreadFactory();
-    /**
-     * 数据库访问对象.
-     */
-    private MysqlRepository repository;
-    /**
-     * ORM.
-     */
-    private ObjectRelationalMapper orm;
+
+    private DataFactory dataFactory;
     /**
      * 数据生成过程中的统计信息.
      */
@@ -61,19 +55,20 @@ public class DataGenerator {
      */
     private DataGenerateStopPolicy stopPolicy;
 
+    private CliArgs cliArgs;
+
     /**
      * 构造实例.
      *
-     * @param mysqlRepository  数据库访问对象
-     * @param orm              查看{@link ObjectRelationalMapper}的定义
+     * @param cliArgs          命令行参数
      * @param dataGenerateStat 数据生成过程的统计信息,所有的{@link DataGenerator}都必须共享同一个统计实例,
      *                         这样每个生成器才能知道整体情况
      * @param stopPolicy       停止生成数据的策略
      */
-    protected DataGenerator(MysqlRepository mysqlRepository, ObjectRelationalMapper orm, DataGenerateStat dataGenerateStat,
-                            DataGenerateStopPolicy stopPolicy) {
-        this.orm = orm;
-        this.repository = mysqlRepository;
+    protected DataGenerator(CliArgs cliArgs, DataGenerateStat dataGenerateStat, DataGenerateStopPolicy stopPolicy) {
+        this.cliArgs = cliArgs;
+        dataFactory = SpringApplicationContextHolder.getApplicationContext().getBean(DataFactory.class);
+        dataFactory.setCliArgs(cliArgs);
         this.dataGenerateStat = dataGenerateStat;
         this.stopPolicy = stopPolicy;
     }
@@ -104,15 +99,15 @@ public class DataGenerator {
     /**
      * 一次数据生成任务开始.
      */
-    protected void oneGenTaskStar() {
+    protected void taskStart() {
         dataGenerateStat.incrementAndGetTotalTaskCount();
     }
 
     /**
      * 一次数据生成任务结束.
      */
-    protected void oneGenTaskEnd() {
-
+    protected void taskEnd() {
+        dataGenerateStat.incrementAndGetSuccessTaskCount();
     }
 
     @Override
@@ -136,26 +131,29 @@ public class DataGenerator {
     /**
      * 数据保存到数据库之前.
      */
-    protected void beforeInsert(List<TableEntity> entities) {
+    protected void beforeInsert(List<TableInsertion> insertions) {
 
     }
 
     /**
      * 数据保存到数据库.
      */
-    protected void insertIntoTable(List<TableEntity> entities) {
-        List<OneTableOperation> list = OneTableOperation.merge(entities);
-        repository.insert(list);
+    protected void insertIntoTable(List<TableInsertion> insertions) {
+        for (TableInsertion insertion : insertions) {
+            insertion.getInsertReturningStep().execute();
+        }
     }
 
     /**
      * 数据保存到数据库之后.
      */
-    protected void afterInsert(List<TableEntity> entities) {
-        for (TableEntity entity : entities) {
-            dataGenerateStat.insertedIncrementAndGet(entity.getClass());
+    protected void afterInsert(List<TableInsertion> insertions) {
+        for (TableInsertion insertion : insertions) {
+            TableName tableName = insertion.getTableName();
+            int count = insertion.getValues();
+            count = dataGenerateStat.insertedIncrementAndGet(tableName, count);
+            logger.info("table={},数据量={}", tableName, count);
         }
-        dataGenerateStat.incrementAndGetSuccessTaskCount();
     }
 
     /**
@@ -194,13 +192,13 @@ public class DataGenerator {
                     break;
                 }
                 try {
-                    oneGenTaskStar();
+                    taskStart();
                     // 获取数据
-                    List<TableEntity> entities = orm.insertTransaction();
-                    beforeInsert(entities);
-                    insertIntoTable(entities);
-                    afterInsert(entities);
-                    oneGenTaskEnd();
+                    List<TableInsertion> insertions = dataFactory.getInsertions();
+                    beforeInsert(insertions);
+                    insertIntoTable(insertions);
+                    afterInsert(insertions);
+                    taskEnd();
                 } catch (Exception e) {
                     onException(e);
                 }

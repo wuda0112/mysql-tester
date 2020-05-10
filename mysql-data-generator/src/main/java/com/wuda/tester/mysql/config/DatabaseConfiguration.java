@@ -4,6 +4,9 @@ import com.wuda.tester.mysql.cli.CliArgs;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.jdbc.pool.PoolConfiguration;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,5 +43,10 @@ public class DatabaseConfiguration {
             tomcatDataSource.setPassword(cliArgs.getMysqlPassword());
         }
         tomcatDataSource.setMaxActive(cliArgs.getMysqlMaxConnection());
+    }
+
+    @Bean
+    public DSLContext getDSLContext() {
+        return DSL.using(getDataSource(), SQLDialect.MYSQL);
     }
 }

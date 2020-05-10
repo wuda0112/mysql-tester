@@ -1,7 +1,7 @@
 package com.wuda.tester.mysql.generate;
 
+import com.wuda.tester.mysql.TableName;
 import com.wuda.tester.mysql.cli.CliArgs;
-import com.wuda.tester.mysql.entity.IndividualUser;
 import com.wuda.tester.mysql.statistic.DataGenerateStat;
 
 /**
@@ -32,7 +32,7 @@ public class FullDataGeneratorStopPolicy implements DataGenerateStopPolicy {
 
     @Override
     public boolean stop(DataGenerateStat stat) {
-        if (stat.getInsertedCount(IndividualUser.class) >= cliArgs.getUserCount()) {
+        if (stat.getInsertedCount(TableName.USER) >= cliArgs.getUserCount()) {
             stopMessage = "数据生成任务成功完成";
             return true;
         } else if (stat.getTotalTaskCount() > cliArgs.getThread() && stat.getFailureRate() > 0.1F) {

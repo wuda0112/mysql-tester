@@ -1,7 +1,6 @@
 package com.wuda.tester.mysql.statistic;
 
-import com.wuda.tester.mysql.orm.ObjectRelationalMapper;
-import com.wuda.yhan.code.generator.lang.TableEntity;
+import com.wuda.tester.mysql.TableName;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +18,7 @@ public class DataGenerateStat {
      */
     private AtomicInteger totalTaskCount = new AtomicInteger();
     /**
-     * 数据生成任务成功的次数.即{@link ObjectRelationalMapper#insertTransaction()}的数据被
-     * 成功保存到数据库的次数.
+     * 数据生成任务成功的次数.
      */
     private AtomicInteger successTaskCount = new AtomicInteger();
     /**
@@ -29,18 +27,18 @@ public class DataGenerateStat {
     private AtomicInteger failureTaskCount = new AtomicInteger();
 
     /**
-     * 已经保存到数据库的实体的数量.key-entity,value-数量
+     * 已经保存到数据库的数量.key-表名,value-数量
      */
-    private Map<Class<? extends TableEntity>, AtomicInteger> inserted_entity_count = new HashMap<>();
+    private Map<TableName, AtomicInteger> inserted_entity_count = new HashMap<>();
 
     /**
-     * 获取给定entity的已经插入到数据库的数量.
+     * 获取给定table已经插入的数量.
      *
-     * @param clazz entity class
+     * @param tableName 表名
      * @return 数量
      */
-    public <T extends TableEntity> int getInsertedCount(Class<T> clazz) {
-        AtomicInteger counter = inserted_entity_count.get(clazz);
+    public int getInsertedCount(TableName tableName) {
+        AtomicInteger counter = inserted_entity_count.get(tableName);
         if (counter != null) {
             return counter.get();
         }
@@ -48,18 +46,19 @@ public class DataGenerateStat {
     }
 
     /**
-     * 给定的entity数量加一,并且返回增加后的值.
+     * 给定的table数量加一,并且返回增加后的值.
      *
-     * @param clazz entity class
+     * @param tableName 表名称
+     * @param count     增加的数量
      * @return 增加后的数量
      */
-    public <T extends TableEntity> int insertedIncrementAndGet(Class<T> clazz) {
-        AtomicInteger counter = inserted_entity_count.get(clazz);
+    public int insertedIncrementAndGet(TableName tableName, int count) {
+        AtomicInteger counter = inserted_entity_count.get(tableName);
         if (counter != null) {
-            return counter.incrementAndGet();
+            return counter.addAndGet(count);
         }
-        counter = new AtomicInteger(1);
-        inserted_entity_count.put(clazz, counter);
+        counter = new AtomicInteger(count);
+        inserted_entity_count.put(tableName, counter);
         return counter.get();
     }
 

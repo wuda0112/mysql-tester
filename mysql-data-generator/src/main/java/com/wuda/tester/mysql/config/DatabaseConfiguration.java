@@ -20,6 +20,11 @@ import javax.sql.DataSource;
 @Configuration
 public class DatabaseConfiguration {
 
+    /**
+     * 获取{@link DataSource}
+     *
+     * @return {@link DataSource}
+     */
     @Bean
     public DataSource getDataSource() {
         PoolConfiguration poolProperties = new PoolProperties();
@@ -31,7 +36,8 @@ public class DatabaseConfiguration {
      * 数据库连接的url,username,password等可以从命令行传入,
      * 使用命令行传入的数据库连接参数.
      *
-     * @param cliArgs 命令行参数
+     * @param dataSource datasource
+     * @param cliArgs    命令行参数
      */
     public static void applyArgs(DataSource dataSource, CliArgs cliArgs) {
         org.apache.tomcat.jdbc.pool.DataSource tomcatDataSource = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
@@ -45,6 +51,11 @@ public class DatabaseConfiguration {
         tomcatDataSource.setMaxActive(cliArgs.getMysqlMaxConnection());
     }
 
+    /**
+     * jooq执行sql语句的context
+     *
+     * @return context
+     */
     @Bean
     public DSLContext getDSLContext() {
         return DSL.using(getDataSource(), SQLDialect.MYSQL);

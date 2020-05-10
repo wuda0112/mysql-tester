@@ -1,5 +1,16 @@
 # 简介
-- 生成测试数据，总共有4个表，包括用户表(individual_user)，店铺表(shop)，仓库表(warehouse)，商品表(item)。生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join语句。
+- 生成测试数据，总共有7个表，它们是
+- - user,用户表
+- - individual_user_general，个人用户基本信息
+- - store，店铺表
+- - store_general，店铺基本信息
+- - item，物品（商品）表
+- - item_general，物品基本信息
+- - item_description，物品描述信息
+- ER
+![image](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_ER.svg)
+
+- 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
 - 用于数据库压力测试
 
 

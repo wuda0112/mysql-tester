@@ -44,7 +44,9 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 # clone项目
 ```aidl
 1. 启动类: com.wuda.tester.mysql.Bootstrap
-2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库
+2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库,比如对于IDEA开发工具，
+输入命令行参数的位置是：Run -> Edit Configuritions -> Configration -> Program arguments ,在输入框中输入
+--mysql-username=your username --mysql-password=your password 即可
 ```
 
 # 支持的参数(必须放在mysql-tester-${VERSION}.jar后面)

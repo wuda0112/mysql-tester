@@ -34,6 +34,7 @@
 3. 生成数据库表,sql脚本如下
 ```
 - [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
+- [1.0.1版本的数据库，后面的结构变化了](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_1.0.1.sql)
 
 ```
 4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306，最简单的就是

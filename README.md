@@ -7,8 +7,9 @@
 - - item，物品（商品）表
 - - item_general，物品基本信息
 - - item_description，物品描述信息
+- 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
 - 数据库ER图
-![image](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_ER.svg)
+![如果看不见图片，需要翻墙](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_ER.svg)
 
 - 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
 - 用于数据库压力测试

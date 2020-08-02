@@ -1,4 +1,4 @@
-# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来,mvn clean install
+# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来,切换到1.0.1版本，mvn clean install
 
 # 快速开始
 

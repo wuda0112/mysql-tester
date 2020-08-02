@@ -14,7 +14,8 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <foundation.version>1.0.1-SNAPSHOT</foundation.version>
+        <jooq.version>3.13.2</jooq.version>
+        <foundation.version>1.0.1</foundation.version>
     </properties>
 
     <dependencies>
@@ -29,6 +30,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>

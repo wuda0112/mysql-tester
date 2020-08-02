@@ -2,6 +2,7 @@
 
 # 简介
 ## 生成测试数据，数据库表如下
+### 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
 ### foundation_user
 - - user,用户表
 - - individual_user_general，个人用户基本信息
@@ -22,7 +23,6 @@
 - - email,邮箱表
 - - property_key,属性的key
 - - property_value,属性的值
-### 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
 
 - 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
 - 用于数据库压力测试

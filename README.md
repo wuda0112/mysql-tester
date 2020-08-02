@@ -1,38 +1,5 @@
 # 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来,mvn clean install
 
-# 简介
-## 生成测试数据，数据库表如下
-### 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
-### foundation_user
-- - user,用户表
-- - individual_user_general，个人用户基本信息
-- - user_account,用户账号信息，适用各种类型的用户
-- - user_email,用户的email
-- - user_phone,用户的电话
-### foundation_store
-- - store，店铺表
-- - store_general，店铺基本信息
-- - store_user_relationship,如果把用户ID字段放在store表中，表明店铺属于某个用户，但是如果有多个用户可以管理这个店铺呢？有种做法是一个用户作为另一个用户的子账号；也可以建立用户与店铺的关联关系，这样感觉更符合逻辑。把用户IID放在store表，可以很明确的表明店铺的owner，如果是用关联关系表的话，就需要明确的标明哪个用户是owner，哪些用户只是管理这个店铺的。
-### foundation_item
-- - item，物品（商品）表
-- - item_general，物品基本信息
-- - item_description，物品描述信息
-- - item_variation,物品规格
-### foundation_commons
-- - phone,电话表
-- - email,邮箱表
-- - property_key,属性的key
-- - property_value,属性的值
-
-- 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
-- 用于数据库压力测试
-
-
-很多工具要么生成的数据是单表，即数据之间没有关联关系，要么数据量较小，对于很多测试看不到效果，本项目的目的就是既生成有关联关系的数据，又可以自定义数据规模！
-
-# 数据量配置
-查看 --user-count 和 --max-item-per-user 两个选项的说明
-
 # 快速开始
 
 ```
@@ -54,6 +21,36 @@
 
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
 ```
+
+# 简介
+生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
+很多工具要么生成的数据是单表，即数据之间没有关联关系，要么数据量较小，对于很多测试看不到效果，本项目的目的就是既生成有关联关系的数据，又可以自定义数据规模！
+
+# 生成测试数据，数据库表如下
+## 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
+### foundation_user
+- - user,用户表
+- - individual_user_general，个人用户基本信息
+- - user_account,用户账号信息，适用各种类型的用户
+- - user_email,用户的email
+- - user_phone,用户的电话
+### foundation_store
+- - store，店铺表
+- - store_general，店铺基本信息
+- - store_user_relationship,如果把用户ID字段放在store表中，表明店铺属于某个用户，但是如果有多个用户可以管理这个店铺呢？有种做法是一个用户作为另一个用户的子账号；也可以建立用户与店铺的关联关系，这样感觉更符合逻辑。把用户IID放在store表，可以很明确的表明店铺的owner，如果是用关联关系表的话，就需要明确的标明哪个用户是owner，哪些用户只是管理这个店铺的。
+### foundation_item
+- - item，物品（商品）表
+- - item_general，物品基本信息
+- - item_description，物品描述信息
+- - item_variation,物品规格
+### foundation_commons
+- - phone,电话表
+- - email,邮箱表
+- - property_key,属性的key
+- - property_value,属性的值
+
+# 数据量配置
+查看 --user-count 和 --max-item-per-user 两个选项的说明
 
 # clone项目
 ```aidl

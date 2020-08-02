@@ -1,17 +1,28 @@
-# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来
+# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来,mvn clean install
 
 # 简介
-- 生成测试数据，总共有7个表，它们是
+## 生成测试数据，总共有4个库个表，它们是
+### foundation_user
 - - user,用户表
 - - individual_user_general，个人用户基本信息
+- - user_account,用户账号信息，适用各种类型的用户
+- - user_email,用户的email
+- - user_phone,用户的电话
+### foundation_store
 - - store，店铺表
 - - store_general，店铺基本信息
+- - store_user_relationship,如果把用户ID字段放在store表中，表明店铺属于某个用户，但是如果有多个用户可以管理这个店铺呢？有种做法是一个用户作为另一个用户的子账号；也可以建立用户与店铺的关联关系，这样感觉更符合逻辑。把用户IID放在store表，可以很明确的表明店铺的owner，如果是用关联关系表的话，就需要明确的标明哪个用户是owner，哪些用户只是管理这个店铺的。
+### foundation_item
 - - item，物品（商品）表
 - - item_general，物品基本信息
 - - item_description，物品描述信息
+- - item_variation,物品规格
+### foundation_commons
+- - phone,电话表
+- - email,邮箱表
+- - property_key,属性的key
+- - property_value,属性的值
 - 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
-- 数据库ER图
-![如果看不见图片，需要翻墙](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_ER.svg)
 
 - 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
 - 用于数据库压力测试
@@ -34,11 +45,9 @@
 - [jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
-3. 生成数据库表,sql脚本如下
+3. 生成数据库表,sql脚本和具体版本的jar在同一个地方下载
 ```
-- [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester.sql)
-
-- [1.0.1版本的数据库(不推荐)](https://github.com/wuda0112/mysql-tester/blob/master/mysql_tester_1.0.1.sql)
+- [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
 4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306，最简单的就是

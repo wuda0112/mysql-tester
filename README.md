@@ -1,3 +1,7 @@
+# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来
+# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来
+# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来
+
 # 简介
 - 生成测试数据，总共有7个表，它们是
 - - user,用户表

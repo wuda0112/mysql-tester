@@ -2,8 +2,9 @@ package com.wuda.tester.mysql.statistic;
 
 import com.wuda.tester.mysql.TableName;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -29,12 +30,28 @@ public class DataGenerateStat {
     /**
      * 已经保存到数据库的数量.key-表名,value-数量
      */
-    private Map<TableName, AtomicInteger> inserted_entity_count = new HashMap<>();
+    private Map<TableName, AtomicInteger> inserted_entity_count = new ConcurrentHashMap<>();
+
+    public DataGenerateStat() {
+        TableName[] tableNames = TableName.values();
+        for (TableName tableName : tableNames) {
+            inserted_entity_count.put(tableName, new AtomicInteger());
+        }
+    }
 
     /**
-     * 获取给定table已经插入的数量.
+     * 获取统计的指标,以及该指标的数量.
      *
-     * @param tableName 表名
+     * @return metric and count
+     */
+    public Set<Map.Entry<TableName, AtomicInteger>> getTableCount() {
+        return inserted_entity_count.entrySet();
+    }
+
+    /**
+     * 获取给定统计指标已经插入的数量.
+     *
+     * @param tableName 统计指标
      * @return 数量
      */
     public int getInsertedCount(TableName tableName) {
@@ -46,20 +63,14 @@ public class DataGenerateStat {
     }
 
     /**
-     * 给定的table数量加一,并且返回增加后的值.
+     * 给定的统计指标数量加一,并且返回增加后的值.
      *
-     * @param tableName 表名称
+     * @param tableName 统计指标
      * @param count     增加的数量
      * @return 增加后的数量
      */
     public int insertedIncrementAndGet(TableName tableName, int count) {
-        AtomicInteger counter = inserted_entity_count.get(tableName);
-        if (counter != null) {
-            return counter.addAndGet(count);
-        }
-        counter = new AtomicInteger(count);
-        inserted_entity_count.put(tableName, counter);
-        return counter.get();
+        return inserted_entity_count.get(tableName).addAndGet(count);
     }
 
     /**
@@ -124,5 +135,17 @@ public class DataGenerateStat {
     public float getFailureRate() {
         int totalPlus1 = totalTaskCount.get() + 1;
         return (float) failureTaskCount.get() / totalPlus1;
+    }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder("生成数据统计信息:");
+        builder.append("totalTaskCount =").append(totalTaskCount).append(",")
+                .append("successTaskCount = ").append(successTaskCount).append(",")
+                .append("failureTaskCount = " + failureTaskCount).append(".\n");
+        Set<Map.Entry<TableName, AtomicInteger>> entrySet = inserted_entity_count.entrySet();
+        for (Map.Entry<TableName, AtomicInteger> entry : entrySet) {
+            builder.append("\t").append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
+        }
+        return builder.toString();
     }
 }

@@ -30,12 +30,15 @@ public class CliArgsRegulator {
         int actualThreadCount = expectedThreadCount;
         int expectedUserCount = cliArgs.getUserCount();
         if (expectedUserCount <= cliArgs.getBatchSize()) {
-            actualThreadCount = 1;
+            actualThreadCount = 2;
         } else if (expectedUserCount <= expectedThreadCount * cliArgs.getBatchSize()) {
             // 比如：总共只需要生成20000个用户,现在有10条线程,每个线程一次性生成10000条数据的情况
             actualThreadCount = expectedThreadCount / cliArgs.getBatchSize() + 1;
         }
-        if(actualThreadCount != expectedThreadCount){
+        if (actualThreadCount <= 1) {
+            actualThreadCount = 2;
+        }
+        if (actualThreadCount != expectedThreadCount) {
             logger.info("生成" + expectedUserCount + "个用户,不需要" + expectedThreadCount + "条线程,重新调整线程数为" + actualThreadCount);
         }
         cliArgs.setThread(actualThreadCount);

@@ -41,7 +41,6 @@
 
     <modules>
         <module>mysql-data-generator</module>
-        <module>mysql-jooq-codegen</module>
         <module>mysql-tester-commons</module>
     </modules>
 

@@ -9,7 +9,7 @@ import com.wuda.tester.mysql.statistic.DataGenerateStat;
  *
  * @author wuda
  */
-public class FullDataGeneratorStopPolicy implements DataGenerateStopPolicy {
+public class DefaultDataGeneratorStopPolicy implements DataGenerateStopPolicy {
 
     /**
      * 退出时,给出具体的描述信息.
@@ -26,7 +26,7 @@ public class FullDataGeneratorStopPolicy implements DataGenerateStopPolicy {
      *
      * @param cliArgs 命令行参数
      */
-    public FullDataGeneratorStopPolicy(CliArgs cliArgs) {
+    public DefaultDataGeneratorStopPolicy(CliArgs cliArgs) {
         this.cliArgs = cliArgs;
     }
 

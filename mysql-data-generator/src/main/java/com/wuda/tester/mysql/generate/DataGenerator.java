@@ -1,210 +1,242 @@
 package com.wuda.tester.mysql.generate;
 
-import com.wuda.tester.mysql.SpringApplicationContextHolder;
-import com.wuda.tester.mysql.TableInsertion;
-import com.wuda.tester.mysql.TableName;
 import com.wuda.tester.mysql.cli.CliArgs;
 import com.wuda.tester.mysql.statistic.DataGenerateStat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import javax.sql.DataSource;
+import java.util.Date;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 数据生成器.每一个{@link DataGenerator}类的实例独享一个线程,
- * 在生成数据的过程中,使用{@link DataGenerateStat}统计,需要注意的是,
- * 如果所有的{@link DataGenerator}使用同一个{@link DataGenerateStat}统计实例,
- * 则所有生成器都会共享全局的统计信息,否则就只是当前生成器自己的统计信息.
- * 然后{@link DataGenerateStopPolicy}根据这些统计信息就可以判断是否停止生成数据, 确定可以停止后,启动的线程将会停止并退出.
+ * 数据生成器,随机生成数据并且插入数据库.在生成数据的过程中,使用{@link DataGenerateStat}统计,
+ * 然后{@link DataGenerateStopPolicy}根据这些统计信息就可以判断是否停止生成数据,
+ * 确定可以停止后,启动的线程将会停止并退出.
  *
+ * @param <T> 具体的{@link DataSet}的类型
  * @author wuda
  */
-public class DataGenerator {
+public abstract class DataGenerator<T extends DataSet> {
 
     /**
      * logger.
      */
     private static Logger logger = LoggerFactory.getLogger(DataGenerator.class);
-
-    /**
-     * 执行任务的线程.
-     */
-    private Thread thread;
-    /**
-     * 生成器是否已经启动.
-     */
-    private boolean started;
-    /**
-     * 生成器是否已经停止.
-     */
-    private boolean stopped;
     /**
      * thread factory.
      */
     private static DefaultThreadFactory threadFactory = new DefaultThreadFactory();
-
-    private DataFactory dataFactory;
     /**
      * 数据生成过程中的统计信息.
      */
-    private DataGenerateStat dataGenerateStat;
+    protected DataGenerateStat dataGenerateStat = new DataGenerateStat();
     /**
      * 停止数据生成策略.
      */
     private DataGenerateStopPolicy stopPolicy;
 
     private CliArgs cliArgs;
+    private BlockingQueue<T> queue;
+    protected DataSource dataSource;
+
+    /**
+     * 系统启动时间.
+     */
+    private Date startupTime;
 
     /**
      * 构造实例.
      *
-     * @param cliArgs          命令行参数
-     * @param dataGenerateStat 数据生成过程的统计信息,所有的{@link DataGenerator}都必须共享同一个统计实例,
-     *                         这样每个生成器才能知道整体情况
-     * @param stopPolicy       停止生成数据的策略
+     * @param cliArgs    命令行参数
+     * @param dataSource datasource
      */
-    protected DataGenerator(CliArgs cliArgs, DataGenerateStat dataGenerateStat, DataGenerateStopPolicy stopPolicy) {
+    public DataGenerator(CliArgs cliArgs, DataSource dataSource) {
         this.cliArgs = cliArgs;
-        dataFactory = SpringApplicationContextHolder.getApplicationContext().getBean(DataFactory.class);
-        dataFactory.setCliArgs(cliArgs);
-        this.dataGenerateStat = dataGenerateStat;
-        this.stopPolicy = stopPolicy;
+        this.stopPolicy = new DefaultDataGeneratorStopPolicy(cliArgs);
+        this.queue = new LinkedBlockingQueue<>(cliArgs.getThread());
+        this.dataSource = dataSource;
     }
 
     /**
-     * 启动线程,执行数据生成任务.如果多次调用该方法,会有以下情形
-     * <ul>
-     * <li>数据生成任务还没有启动,则会启动一个线程,然后开始任务</li>
-     * <li>数据生成任务已经启动,则此方法调用不会产生任何影响</li>
-     * <li>数据生成任务已经停止,抛出{@link AlreadyStoppedException}异常</li>
-     * </ul>
+     * 正在运行的Consumer的数量.
+     */
+    private AtomicInteger runningConsumerCount = new AtomicInteger(0);
+    /**
+     * 正在运行的Producer的数量.
+     */
+    private AtomicInteger runningProducerCount = new AtomicInteger(0);
+
+    /**
+     * 准备数据.
      *
-     * @throws AlreadyStoppedException 已经停止
+     * @param cliArgs 包含了数据量参数,这样才知道每次生成多少数据量比较合适
+     * @return data set
      */
-    public void generate() throws AlreadyStoppedException {
-        if (started) {
-            return;
-        }
-        if (stopped) {
-            throw new AlreadyStoppedException();
-        }
-        Task task = new Task();
-        thread = threadFactory.newThread(task);
-        thread.start();
-        started = true;
-    }
+    public abstract T prepareDataSet(CliArgs cliArgs);
 
     /**
-     * 一次数据生成任务开始.
-     */
-    protected void taskStart() {
-        dataGenerateStat.incrementAndGetTotalTaskCount();
-    }
-
-    /**
-     * 一次数据生成任务结束.
-     */
-    protected void taskEnd() {
-        dataGenerateStat.incrementAndGetSuccessTaskCount();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(this.getClass().getName()).append("\n");
-        builder.append("\tstarted=").append(started).append("\n");
-        builder.append("\tstopped=").append(stopped).append("\n");
-        if (thread != null) {
-            builder.append("\tthread").append("=").append(thread.getName()).append("\n");
-            builder.append("\tthread state:").append(thread.getState());
-            StackTraceElement[] trace = thread.getStackTrace();
-            for (StackTraceElement traceElement : trace)
-                builder.append("\t ").append(traceElement);
-        } else {
-            builder.append("\tthread is null");
-        }
-        return builder.toString();
-    }
-
-    /**
-     * 数据保存到数据库之前.
-     */
-    protected void beforeInsert(List<TableInsertion> insertions) {
-
-    }
-
-    /**
-     * 数据保存到数据库.
-     */
-    protected void insertIntoTable(List<TableInsertion> insertions) {
-        for (TableInsertion insertion : insertions) {
-            insertion.getInsertReturningStep().execute();
-        }
-    }
-
-    /**
-     * 数据保存到数据库之后.
-     */
-    protected void afterInsert(List<TableInsertion> insertions) {
-        for (TableInsertion insertion : insertions) {
-            TableName tableName = insertion.getTableName();
-            int count = insertion.getValuesCount();
-            count = dataGenerateStat.insertedIncrementAndGet(tableName, count);
-            logger.info("table={},数据量={}", tableName, count);
-        }
-    }
-
-    /**
-     * 当异常发生时.
+     * 将准备好的数据插入到数据库中.
      *
-     * @param throwable 具体的异常信息
+     * @param dataSet 准备好的数据
      */
-    protected void onException(Throwable throwable) {
-        logger.warn(throwable.getMessage(), throwable);
-        dataGenerateStat.incrementAndGetFailureTaskCount();
+    public abstract void insert(T dataSet);
+
+
+    /**
+     * 根据总的线程数,分配Producer占用的线程数.
+     *
+     * @param totalThreadSize 总的线程数
+     * @return Producer的线程数
+     */
+    public static int allocateProducerThreadSize(int totalThreadSize) {
+        float producerThreadSize = totalThreadSize * 0.01F;
+        return (int) Math.ceil(producerThreadSize);
     }
 
     /**
-     * 当数据生成任务停止后,做一些后续收尾操作.
+     * 线程sleep.当catch到{@link InterruptedException}异常,使用{@link RuntimeException}的方式将异常抛出.
+     *
+     * @param millis millis
      */
-    protected void onStop() {
-        Thread old = thread;
-        old.interrupt();
-        thread = null;
-        stopped = true;
-        String message = stopPolicy.getStopMessage();
-        logger.info("数据生成任务停止!" + message);
+    public void threadSleepSilence(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("线程sleep时收到了InterruptedException", e);
+        }
     }
 
     /**
-     * 处理数据生成任务.
+     * 启动生产者,消费者,监控线程.
      */
-    class Task implements Runnable {
+    public void startup() {
+        startupTime = new Date();
+        int producerSize = allocateProducerThreadSize(cliArgs.getThread());
+        int consumerSize = cliArgs.getThread() - producerSize;
+        for (int i = 0; i < producerSize; i++) {
+            threadFactory.newThread(new Producer("Producer-" + i)).start();
+        }
+        threadSleepSilence(30 * 1000); // 让producer先产生下数据
+        for (int i = 0; i < consumerSize; i++) {
+            threadFactory.newThread(new Consumer("Consumer-" + i)).start();
+        }
+        MonitorThread monitorThread = new MonitorThread();
+        monitorThread.setDaemon(true);
+        monitorThread.start();
+
+        while (runningConsumerCount.get() > 0 || runningProducerCount.get() > 0) {
+            threadSleepSilence(60 * 1000);
+        }
+    }
+
+    /**
+     * the Producer.
+     *
+     * @author wuda
+     */
+    public class Producer implements Runnable {
+
+        /**
+         * Producer的名称.
+         */
+        private String name;
+
+        /**
+         * 构造指定名称的Producer.
+         *
+         * @param name 名称
+         */
+        public Producer(String name) {
+            this.name = name;
+        }
 
         @Override
         public void run() {
+            runningProducerCount.incrementAndGet();
             while (!stopPolicy.stop(dataGenerateStat)) {
-                Thread currentThread = Thread.currentThread();
-                if (currentThread.isInterrupted()) {
-                    logger.warn(currentThread.getName() + " interrupted");
-                    break;
-                }
+                T dataSet = prepareDataSet(cliArgs);
                 try {
-                    taskStart();
-                    // 获取数据
-                    List<TableInsertion> insertions = dataFactory.getInsertions();
-                    beforeInsert(insertions);
-                    insertIntoTable(insertions);
-                    afterInsert(insertions);
-                    taskEnd();
-                } catch (Exception e) {
-                    onException(e);
+                    queue.put(dataSet);
+                } catch (InterruptedException e) {
+                    logger.warn("producer = {} Interrupted", name);
                 }
             }
-            onStop();
+            runningProducerCount.decrementAndGet();
+            if (runningProducerCount.get() <= 0) {
+                logger.info(dataGenerateStat.toString());
+            }
+            logger.info("Producer ={} 退出,{}", name, stopPolicy.getStopMessage());
         }
+    }
+
+    /**
+     * the Consumer.
+     *
+     * @author wuda
+     */
+    public class Consumer implements Runnable {
+
+        /**
+         * consumer的名称.
+         */
+        private String name;
+
+        /**
+         * 构造指定名称的Consumer.
+         *
+         * @param name 名称
+         */
+        public Consumer(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            runningConsumerCount.incrementAndGet();
+            T dataSet = null;
+            while ((dataSet = queue.poll()) != null || runningProducerCount.get() > 0) {
+                if (dataSet != null) {
+                    try {
+                        dataGenerateStat.incrementAndGetTotalTaskCount();
+                        insert(dataSet);
+                        dataGenerateStat.incrementAndGetSuccessTaskCount();
+                    } catch (Exception e) {
+                        logger.error("Consumer = {},生成数据异常", name, e);
+                        dataGenerateStat.incrementAndGetFailureTaskCount();
+                    }
+                } else {
+                    logger.info("queue没有获取到元素,可以考虑加大Producer数量,Consumer count ={} ,Producer count = {}"
+                            , runningConsumerCount.get(), runningProducerCount.get());
+                }
+            }
+            runningConsumerCount.decrementAndGet();
+            logger.info("Consumer ={} 退出 ", name);
+        }
+    }
+
+    /**
+     * 用于监控生成数据的情况.
+     *
+     * @author wuda
+     */
+    public class MonitorThread extends Thread {
+
+        @Override
+        public void run() {
+            while (runningConsumerCount.get() > 0 || runningProducerCount.get() > 0) {
+                logger.info("启动时间: {}", startupTime);
+                logger.info("DataSet queue中暂存的DataSet数量是:{},Consumer Count = {},Producer Count = {}"
+                        , queue.size(), runningConsumerCount.get(), runningProducerCount.get());
+                logger.info(dataGenerateStat.toString());
+                threadSleepSilence(60 * 1000);
+            }
+            logger.info("monitor thread exit");
+        }
+
     }
 
     /**

@@ -5,10 +5,19 @@ package com.wuda.tester.mysql;
  */
 public enum TableName {
     USER,
+    USER_ACCOUNT,
     INDIVIDUAL_USER_GENERAL,
+    USER_EMAIL,
+    USER_PHONE,
     STORE,
     STORE_GENERAL,
+    STORE_USER_RELATIONSHIP,
     ITEM,
     ITEM_GENERAL,
-    ITEM_DESCRIPTION;
+    ITEM_VARIATION,
+    ITEM_DESCRIPTION,
+    EMAIL,
+    PHONE,
+    PROPERTY_KEY,
+    PROPERTY_VALUE;
 }

@@ -21,7 +21,7 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 ```
 
 # clone项目
-##### 重要：如果你不是下载jar包生成数据，而是clone本项目代码,需要了解master分支的代码使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)，该项目还在持续开发中（即将发布正式版本），还没上传到Maven中心仓库，所以需要先把该项目clone下来,切换到【1.0.2-SNAPSHOT】版本，mvn clean install
+##### 重要：如果你不是下载jar包生成数据，而是clone本项目代码,需要了解master分支的代码使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)，该项目还在持续开发中（即将发布正式版本），还没上传到Maven中心仓库，所以需要先把该项目clone下来,mvn clean install到你本地仓库中
 ```aidl
 1. 启动类: com.wuda.tester.mysql.Bootstrap
 2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库,比如对于IDEA开发工具，
@@ -34,7 +34,7 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 很多工具要么生成的数据是单表，即数据之间没有关联关系，要么数据量较小，对于很多测试看不到效果，本项目的目的就是既生成有关联关系的数据，又可以自定义数据规模！
 
 # 数据库表
-越高的版本，所使用的表的数量越多，因此可能不同版本所使用的表不一样，已经发布的版本所使用的表，请查看对应版本的SQL文件
+不同的版本，所使用的表可能不一样，因为一直在增加更多的表。越高的版本，所使用的表的数量越多，已经发布的版本所使用的表，请查看对应版本的SQL文件
 
 ## 正在开发中的master分支所使用的表，如下
 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)

@@ -1,19 +1,24 @@
 package com.wuda.tester.mysql.generate;
 
-import com.wuda.foundation.commons.*;
-import com.wuda.foundation.commons.property.BuiltinPropertyKeyType;
-import com.wuda.foundation.commons.property.BuiltinPropertyKeyUse;
+import com.wuda.foundation.commons.CreateEmail;
+import com.wuda.foundation.commons.CreatePhone;
 import com.wuda.foundation.commons.property.CreatePropertyKey;
 import com.wuda.foundation.commons.property.CreatePropertyValue;
-import com.wuda.foundation.item.*;
-import com.wuda.foundation.lang.BuiltinEmailState;
-import com.wuda.foundation.lang.BuiltinPhoneState;
+import com.wuda.foundation.item.CreateItem;
+import com.wuda.foundation.item.CreateItemDescription;
+import com.wuda.foundation.item.CreateItemGeneral;
+import com.wuda.foundation.item.CreateItemVariation;
 import com.wuda.foundation.lang.Constant;
 import com.wuda.foundation.lang.FoundationContext;
 import com.wuda.foundation.lang.identify.BuiltinIdentifierType;
 import com.wuda.foundation.lang.identify.LongIdentifier;
-import com.wuda.foundation.store.*;
-import com.wuda.foundation.user.*;
+import com.wuda.foundation.store.BindStoreUser;
+import com.wuda.foundation.store.CreateStore;
+import com.wuda.foundation.store.CreateStoreGeneral;
+import com.wuda.foundation.user.BindUserEmail;
+import com.wuda.foundation.user.BindUserPhone;
+import com.wuda.foundation.user.CreateUser;
+import com.wuda.foundation.user.CreateUserAccount;
 import com.wuda.tester.mysql.cli.CliArgs;
 import com.wuda.tester.mysql.commons.utils.RandomUtilsExt;
 import lombok.Getter;
@@ -32,6 +37,7 @@ import java.util.List;
 public class FoundationBasedDataSet implements DataSet {
 
     private int batchSize = 500;
+    private byte byte0 = (byte) 0;
 
     private List<CreateUser> users;
     private List<CreateUserAccount> userAccounts;
@@ -78,8 +84,8 @@ public class FoundationBasedDataSet implements DataSet {
             long id = ids[i];
             CreateUser user = new CreateUser.Builder()
                     .setId(id)
-                    .setUserType(BuiltinUserType.ZERO)
-                    .setUserState(BuiltinUserState.ZERO)
+                    .setUserType(byte0)
+                    .setUserState(byte0)
                     .build();
             list.add(user);
         }
@@ -97,7 +103,7 @@ public class FoundationBasedDataSet implements DataSet {
                     .setUserId(user.getId())
                     .setPassword(RandomUtilsExt.enRandomString(10))
                     .setUsername(RandomUtilsExt.enRandomString(9))
-                    .setState(BuiltinUserAccountState.ZERO)
+                    .setState(byte0)
                     .build();
             list.add(userAccount);
         }
@@ -115,7 +121,7 @@ public class FoundationBasedDataSet implements DataSet {
             CreateEmail email = new CreateEmail.Builder()
                     .setId(emailId)
                     .setAddress(RandomUtilsExt.enRandomString(10) + RandomUtilsExt.randomEmailSuffix())
-                    .setEmailState(BuiltinEmailState.ZERO)
+                    .setEmailState(byte0)
                     .build();
 
             long bindingId = bindingIds[i];
@@ -123,8 +129,8 @@ public class FoundationBasedDataSet implements DataSet {
                     .setId(bindingId)
                     .setEmailId(emailId)
                     .setUserId(user.getId())
-                    .setUse(BuiltinEmailUse.FOR_SIGN_IN)
-                    .setState(BuiltinUserEmailState.ZERO)
+                    .setUse(byte0)
+                    .setState(byte0)
                     .build();
             emailList.add(email);
             bindingList.add(bindUserEmail);
@@ -143,8 +149,8 @@ public class FoundationBasedDataSet implements DataSet {
             CreatePhone phone = new CreatePhone.Builder()
                     .setId(phoneId)
                     .setNumber(RandomUtilsExt.enRandomString(11))
-                    .setPhoneType(BuiltinPhoneType.ZERO)
-                    .setPhoneState(BuiltinPhoneState.ZERO)
+                    .setPhoneType(byte0)
+                    .setPhoneState(byte0)
                     .build();
 
             long bindingId = bindingIds[i];
@@ -152,8 +158,8 @@ public class FoundationBasedDataSet implements DataSet {
                     .setId(bindingId)
                     .setPhoneId(phoneId)
                     .setUserId(user.getId())
-                    .setUse(BuiltinPhoneUse.FOR_SIGN_IN)
-                    .setState(BuiltinUserPhoneState.ZERO)
+                    .setUse(byte0)
+                    .setState(byte0)
                     .build();
             phoneList.add(phone);
             bindingList.add(bindUserPhone);
@@ -171,8 +177,8 @@ public class FoundationBasedDataSet implements DataSet {
             long storeId = storeIds[i];
             CreateStore store = new CreateStore.Builder()
                     .setId(storeId)
-                    .setStoreType(BuiltinStoreType.ZERO)
-                    .setStoreState(BuiltinStoreState.ZERO)
+                    .setStoreType(byte0)
+                    .setStoreState(byte0)
                     .build();
 
             long bindingId = bindingIds[i];
@@ -216,8 +222,8 @@ public class FoundationBasedDataSet implements DataSet {
                         .setId(id)
                         .setStoreId(store.getId())
                         .setCategoryId(1L)
-                        .setItemState(BuiltinItemState.ZERO)
-                        .setItemType(BuiltinItemType.ZERO)
+                        .setItemState(byte0)
+                        .setItemType(byte0)
                         .build();
                 list.add(item);
             }
@@ -251,7 +257,7 @@ public class FoundationBasedDataSet implements DataSet {
                     .setId(id)
                     .setItemId(item.getId())
                     .setName(RandomUtilsExt.enRandomString(8))
-                    .setState(BuiltinItemState.ZERO)
+                    .setState(byte0)
                     .build();
             list.add(itemVariation);
         }
@@ -284,8 +290,8 @@ public class FoundationBasedDataSet implements DataSet {
             CreatePropertyKey createPropertyKey = new CreatePropertyKey.Builder()
                     .setId(id)
                     .setOwner(new LongIdentifier(item.getId(), BuiltinIdentifierType.TABLE_ITEM))
-                    .setType(BuiltinPropertyKeyType.ZERO)
-                    .setUse(BuiltinPropertyKeyUse.ZERO)
+                    .setType(byte0)
+                    .setUse(byte0)
                     .setKey(RandomUtilsExt.enRandomString(6))
                     .build();
             list.add(createPropertyKey);

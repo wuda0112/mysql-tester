@@ -1,6 +1,4 @@
-# 重要：master分支的代码，使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)该项目还没上传到Maven仓库中心，所以需要先把该项目clone下来,切换到1.0.1版本，mvn clean install
-
-# 快速开始
+# 下载可执行JAR包，生成数据
 
 ```
 1. 安装Java JDK, Java版本 >= 1.8
@@ -12,7 +10,7 @@
 - [jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
-3. 生成数据库表,sql脚本和具体版本的jar在同一个地方下载
+3. 生成数据库表,SQL文件和【相应版本的JAR在同一个地方下载】
 ```
 - [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/releases/)
 
@@ -22,12 +20,24 @@
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
 ```
 
+# clone项目
+##### 重要：如果你不是下载jar包生成数据，而是clone本项目代码,需要了解master分支的代码使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)，该项目还在持续开发中（即将发布正式版本），还没上传到Maven中心仓库，所以需要先把该项目clone下来,切换到【1.0.2-SNAPSHOT】版本，mvn clean install
+```aidl
+1. 启动类: com.wuda.tester.mysql.Bootstrap
+2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库,比如对于IDEA开发工具，
+输入命令行参数的位置是：Run -> Edit Configuritions -> Configration -> Program arguments ,在输入框中输入
+--mysql-username=your username --mysql-password=your password 即可
+```
+
 # 简介
 生成的数据规模是可配置的，比如指定生成100万用户,5000万商品；并且**数据之间有关联关系**，因此可以测试sql join等语句。
 很多工具要么生成的数据是单表，即数据之间没有关联关系，要么数据量较小，对于很多测试看不到效果，本项目的目的就是既生成有关联关系的数据，又可以自定义数据规模！
 
-# 生成测试数据，数据库表如下
-## 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
+# 数据库表
+越高的版本，所使用的表的数量越多，因此可能不同版本所使用的表不一样，已经发布的版本所使用的表，请查看对应版本的SQL文件
+
+## 正在开发中的master分支所使用的表，如下
+数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
 ### foundation_user
 - - user,用户表
 - - individual_user_general，个人用户基本信息
@@ -51,14 +61,6 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 
 # 数据量配置
 查看 --user-count 和 --max-item-per-user 两个选项的说明
-
-# clone项目
-```aidl
-1. 启动类: com.wuda.tester.mysql.Bootstrap
-2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库,比如对于IDEA开发工具，
-输入命令行参数的位置是：Run -> Edit Configuritions -> Configration -> Program arguments ,在输入框中输入
---mysql-username=your username --mysql-password=your password 即可
-```
 
 # 支持的参数(必须放在mysql-tester-${VERSION}.jar后面)
 

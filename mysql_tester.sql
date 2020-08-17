@@ -1,10 +1,10 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-CREATE DATABASE IF NOT EXISTS `foundation_commons` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `foundation_commons` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `foundation_commons`;
 
 CREATE TABLE IF NOT EXISTS `email` (
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `email` (
                                      PRIMARY KEY (`email_id`),
                                      UNIQUE KEY `email_id` (`email_id`),
                                      UNIQUE KEY `idx_email_unique` (`address`,`is_deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198696557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='email信息';
+) ENGINE=InnoDB AUTO_INCREMENT=311983418923555933 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='email信息';
 
 CREATE TABLE IF NOT EXISTS `phone` (
                                      `phone_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `phone` (
                                      PRIMARY KEY (`phone_id`),
                                      UNIQUE KEY `phone_id` (`phone_id`),
                                      UNIQUE KEY `idx_phone_number` (`number`,`is_deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198697557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='电话信息。';
+) ENGINE=InnoDB AUTO_INCREMENT=311983418789337661 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='电话信息。';
 
 CREATE TABLE IF NOT EXISTS `property_key` (
                                             `property_key_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS `property_key` (
                                             `type` tinyint(3) unsigned NOT NULL COMMENT '属性的类型，比如最常用的就是“字面量”类型；比如该属性表示图片，属性值保存图片的链接；比如该属性表示颜色，因为在一些应用中，可以使用调色盘选取颜色，或者在显示时，可以显示颜色，而不是白色这样的纯文本',
                                             `owner_type` tinyint(3) unsigned NOT NULL COMMENT '该属性的owner的类型',
                                             `owner_identifier` bigint(20) unsigned NOT NULL COMMENT '该属性的owner的id',
-                                            `use` tinyint(3) unsigned NOT NULL COMMENT '用途。比如用于属性模板；比如用于某个具体的商品的属性；比如用于系统的环境变量；比如用于任意的key/value pair',
                                             `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                             `create_user_id` bigint(20) unsigned NOT NULL,
                                             `last_modify_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -50,10 +49,23 @@ CREATE TABLE IF NOT EXISTS `property_key` (
                                             `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                             PRIMARY KEY (`property_key_id`),
                                             UNIQUE KEY `idx_unique` (`owner_identifier`,`owner_type`,`key`,`is_deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293223865675 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='属性的key';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303232068556 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='属性的key';
+
+CREATE TABLE IF NOT EXISTS `property_key_definition` (
+                                                       `property_definition_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                                                       `property_key_id` bigint(20) unsigned NOT NULL COMMENT '属性值ID',
+                                                       `data_type` varchar(45) NOT NULL COMMENT '数据类型，格式是schema:datatype。比如：MySQL:VARCHAR',
+                                                       `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                       `create_user_id` bigint(20) unsigned NOT NULL,
+                                                       `last_modify_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                                       `last_modify_user_id` bigint(20) unsigned NOT NULL,
+                                                       `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
+                                                       PRIMARY KEY (`property_definition_id`),
+                                                       KEY `fk_attribute_key_id` (`property_key_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=311977554376396813 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='property key 的定义，就好像是数据库表中列的定义是类似的';
 
 CREATE TABLE IF NOT EXISTS `property_value` (
-                                              `property_value_id` bigint(20) unsigned NOT NULL,
+                                              `property_value_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                               `property_key_id` bigint(20) unsigned NOT NULL COMMENT '所属的key',
                                               `value` varchar(45) NOT NULL COMMENT '属性值',
                                               `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -63,9 +75,9 @@ CREATE TABLE IF NOT EXISTS `property_value` (
                                               `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                               PRIMARY KEY (`property_value_id`),
                                               UNIQUE KEY `idx_attr_value` (`property_key_id`,`value`,`is_deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='属性的值';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303236263639 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='属性的值';
 
-CREATE DATABASE IF NOT EXISTS `foundation_item` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `foundation_item` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `foundation_item`;
 
 CREATE TABLE IF NOT EXISTS `item` (
@@ -80,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `item` (
                                     `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                     PRIMARY KEY (`item_id`),
                                     KEY `fk_store_id` (`store_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293202894739 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='代表所有的物品，之前有把用户ID放进来，表示该物品所属的用户，但是考虑到如果有子账号的情况，物品难道属于这个子账号所属的用户吗？而且记录了创建人用户ID，考虑这两个因素，因此不设置用户ID列';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303211098016 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='代表所有的物品，之前有把用户ID放进来，表示该物品所属的用户，但是考虑到如果有子账号的情况，物品难道属于这个子账号所属的用户吗？而且记录了创建人用户ID，考虑这两个因素，因此不设置用户ID列';
 
 CREATE TABLE IF NOT EXISTS `item_description` (
                                                 `item_description_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -95,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `item_description` (
                                                 PRIMARY KEY (`item_description_id`),
                                                 KEY `fk_item_id` (`item_id`),
                                                 KEY `fk_item_variation_id` (`item_variation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293219670493 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='item的描述信息，通常作为详情的一个字段，但是，由于描述信息通常内容较多，很多orm框架都是select *，分开了可以避免查询出来（有时候根本就没用到），而且大数据量的字段更新性能较差，如果需要更新，会影响到核心item表，因此单独作为一个表保存。也可以表示物品某个规格的描述信息，如果variation id不等于0';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303227873473 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='item的描述信息，通常作为详情的一个字段，但是，由于描述信息通常内容较多，很多orm框架都是select *，分开了可以避免查询出来（有时候根本就没用到），而且大数据量的字段更新性能较差，如果需要更新，会影响到核心item表，因此单独作为一个表保存。也可以表示物品某个规格的描述信息，如果variation id不等于0';
 
 CREATE TABLE IF NOT EXISTS `item_general` (
                                             `item_general_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -108,10 +120,10 @@ CREATE TABLE IF NOT EXISTS `item_general` (
                                             `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                             PRIMARY KEY (`item_general_id`),
                                             KEY `fk_item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293211280129 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='物品基本信息，也可以表示物品某个规格的基本信息，如果variation id不等于0';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303219483307 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='物品基本信息，也可以表示物品某个规格的基本信息，如果variation id不等于0';
 
 CREATE TABLE IF NOT EXISTS `item_variation` (
-                                              `item_variation_id` bigint(20) unsigned NOT NULL,
+                                              `item_variation_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                               `item_id` bigint(20) unsigned NOT NULL,
                                               `name` varchar(45) NOT NULL DEFAULT '' COMMENT '规格名称。方便管理。',
                                               `state` tinyint(3) unsigned NOT NULL COMMENT '状态',
@@ -122,9 +134,9 @@ CREATE TABLE IF NOT EXISTS `item_variation` (
                                               `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                               PRIMARY KEY (`item_variation_id`),
                                               KEY `fk_item_id` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='规格。比如一件衣服，有红色，白色两种规格。具体的属性和值保存在MongoDB. 不能用属性ID关联, 而是要具体的属性名称和值, 避免关联的属性修改. 注意和SKU之间的区别.';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303223678390 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='规格。比如一件衣服，有红色，白色两种规格。具体的属性和值保存在MongoDB. 不能用属性ID关联, 而是要具体的属性名称和值, 避免关联的属性修改. 注意和SKU之间的区别.';
 
-CREATE DATABASE IF NOT EXISTS `foundation_security` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `foundation_security` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `foundation_security`;
 
 CREATE TABLE IF NOT EXISTS `permission_action` (
@@ -143,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `permission_action` (
                                                  UNIQUE KEY `idx_permission_action` (`permission_target_id`,`name`,`is_deleted`) COMMENT '同一个permission的action必须唯一',
                                                  KEY `fk_permission_target_id` (`permission_target_id`),
                                                  KEY `idx_referenced_object` (`referenced_type`,`referenced_identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='permission允许的行为。参考: java.security.Permission#getActions。为什么要把作用对象和对该对象的action分开呢？因为对于同一个作用对象，可能有多个action，比如对于一个文件可以有读和写权限。action可以关联外部对象，具体的解释可以参考permission targe ,它们对于关联外部对象的定义是一样的。';
+) ENGINE=InnoDB AUTO_INCREMENT=311979500202102788 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='permission允许的行为。参考: java.security.Permission#getActions。为什么要把作用对象和对该对象的action分开呢？因为对于同一个作用对象，可能有多个action，比如对于一个文件可以有读和写权限。action可以关联外部对象，具体的解释可以参考permission targe ,它们对于关联外部对象的定义是一样的。';
 
 CREATE TABLE IF NOT EXISTS `permission_category` (
                                                    `permission_category_id` bigint(20) unsigned NOT NULL,
@@ -158,10 +170,10 @@ CREATE TABLE IF NOT EXISTS `permission_category` (
                                                    PRIMARY KEY (`permission_category_id`),
                                                    UNIQUE KEY `permission_category_id` (`permission_category_id`),
                                                    KEY `idx_parent_id` (`parent_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='permission分类';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='permission分类';
 
 CREATE TABLE IF NOT EXISTS `permission_target` (
-                                                 `permission_target_id` bigint(20) unsigned NOT NULL,
+                                                 `permission_target_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                                  `permission_category_id` bigint(20) unsigned NOT NULL COMMENT '分类',
                                                  `name` varchar(45) NOT NULL COMMENT 'permission target  name。在java.security.Permission#getName设计中，name就唯一识别了作用对象，类似的，在我们这里，由于有分类，因此只要在分类中唯一即可',
                                                  `type` tinyint(3) unsigned NOT NULL COMMENT 'permission target的类型。假设在一个web系统中，有两种类型的权限控制，一种是为用户授权可以使用系统的哪些功能；另外一种是为用户授权可以使用哪种终端访问系统(比如App，pc)，这两类是完全不同的对象，需要区分开,便于管理。',
@@ -177,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `permission_target` (
                                                  UNIQUE KEY `idx_permission_name` (`permission_category_id`,`name`,`is_deleted`) COMMENT '在同一个分类下，名称必须唯一',
                                                  KEY `fk_permission_category_id` (`permission_category_id`),
                                                  KEY `idx_referenced` (`referenced_type`,`referenced_identifier`) COMMENT '关联的外部对象'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='permission作用的对象，分为两类，1，关联外部对象，使用type字段表明外部对象的类型，referenced_id表明外部对象的唯一标记，比如在web系统中，已经拥有了菜单表，如果要对菜单权限控制，使用referenced_id关联菜单表的主键ID，就可以将permission与菜单数据建立联系，而不需要把菜单相关的逻辑引入到权限体系中；2，不关联外部对象，当前表中的信息就已经描述了作用对象的信息。对于permission体系来说，permission target是主体（一等公民），permission target name才能唯一（准确来说只要在分类中唯一）描述一个permission target，不管有没有关联外部对象，对permission体系和这个permission target没有任何影响，也没有任何特殊处理，那些关联外部对象的属性也只是这个permission target的普通属性而已，如果关联了外部对象，也就只是这个permission target关联外部对象的属性被赋了值，仅此而已，至于这些关联外部对象的属性该如何处理，是具体应用（实现类）该做的事情。这样设计的好处是，1，系统中已有的数据可以轻松接入权限控制体系，而且两边互不影响；2，permission相关的表本身就可以做一套权限控制体系';
+) ENGINE=InnoDB AUTO_INCREMENT=311979500202102786 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='permission作用的对象，分为两类，1，关联外部对象，使用type字段表明外部对象的类型，referenced_id表明外部对象的唯一标记，比如在web系统中，已经拥有了菜单表，如果要对菜单权限控制，使用referenced_id关联菜单表的主键ID，就可以将permission与菜单数据建立联系，而不需要把菜单相关的逻辑引入到权限体系中；2，不关联外部对象，当前表中的信息就已经描述了作用对象的信息。对于permission体系来说，permission target是主体（一等公民），permission target name才能唯一（准确来说只要在分类中唯一）描述一个permission target，不管有没有关联外部对象，对permission体系和这个permission target没有任何影响，也没有任何特殊处理，那些关联外部对象的属性也只是这个permission target的普通属性而已，如果关联了外部对象，也就只是这个permission target关联外部对象的属性被赋了值，仅此而已，至于这些关联外部对象的属性该如何处理，是具体应用（实现类）该做的事情。这样设计的好处是，1，系统中已有的数据可以轻松接入权限控制体系，而且两边互不影响；2，permission相关的表本身就可以做一套权限控制体系';
 
 CREATE TABLE IF NOT EXISTS `subject_permission` (
                                                   `id` bigint(20) unsigned NOT NULL,
@@ -192,9 +204,9 @@ CREATE TABLE IF NOT EXISTS `subject_permission` (
                                                   UNIQUE KEY `idx_subject` (`subject_type`,`subject_identifier`),
                                                   KEY `fk_permission_target_id` (`persission_target_id`),
                                                   KEY `fk_permission_action_id` (`permission_action_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='subject可以代表用户，也可以代表想要访问其他资源的应用，suibject与permission的关联关系表。比如我们可以说user 【IS A】 subject';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='subject可以代表用户，也可以代表想要访问其他资源的应用，suibject与permission的关联关系表。比如我们可以说user 【IS A】 subject';
 
-CREATE DATABASE IF NOT EXISTS `foundation_store` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `foundation_store` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `foundation_store`;
 
 CREATE TABLE IF NOT EXISTS `store` (
@@ -207,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `store` (
                                      `last_modify_user_id` bigint(20) unsigned NOT NULL,
                                      `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                      PRIMARY KEY (`store_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198698557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='店铺信息';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303206901933 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='店铺信息';
 
 CREATE TABLE IF NOT EXISTS `store_general` (
                                              `store_general_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -220,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `store_general` (
                                              `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                              PRIMARY KEY (`store_general_id`),
                                              KEY `fk_store_id` (`store_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198699557 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='店铺基本信息';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303206902933 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='店铺基本信息';
 
 CREATE TABLE IF NOT EXISTS `store_user_relationship` (
                                                        `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -233,9 +245,9 @@ CREATE TABLE IF NOT EXISTS `store_user_relationship` (
                                                        PRIMARY KEY (`id`),
                                                        KEY `fk_store_id` (`store_id`),
                                                        KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198699057 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='如果把用户ID字段放在store表中，表明店铺属于某个用户，但是如果有多个用户可以管理这个店铺呢？有种做法是一个用户作为另一个用户的子账号；也可以建立用户与店铺的关联关系，这样感觉更符合逻辑。把用户IID放在store表，可以很明确的表明店铺的owner，如果是用关联关系表的话，就需要明确的标明哪个用户是owner，哪些用户只是管理这个店铺的。';
+) ENGINE=InnoDB AUTO_INCREMENT=311983303206902433 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='如果把用户ID字段放在store表中，表明店铺属于某个用户，但是如果有多个用户可以管理这个店铺呢？有种做法是一个用户作为另一个用户的子账号；也可以建立用户与店铺的关联关系，这样感觉更符合逻辑。把用户IID放在store表，可以很明确的表明店铺的owner，如果是用关联关系表的话，就需要明确的标明哪个用户是owner，哪些用户只是管理这个店铺的。';
 
-CREATE DATABASE IF NOT EXISTS `foundation_user` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+CREATE DATABASE IF NOT EXISTS `foundation_user` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `foundation_user`;
 
 CREATE TABLE IF NOT EXISTS `individual_user_general` (
@@ -251,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `individual_user_general` (
                                                        `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                                        PRIMARY KEY (`individual_user_general_id`),
                                                        KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='个人用户－基本信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='个人用户－基本信息';
 
 CREATE TABLE IF NOT EXISTS `user` (
                                     `user_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -264,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `user` (
                                     `is_deleted` bigint(20) unsigned NOT NULL DEFAULT '0',
                                     PRIMARY KEY (`user_id`),
                                     UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416242397289605 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户有很多类型，比如一种分类方法是把用户分成个人用户和企业用户，而不同类型的用户需要的字段不一样，但是他们都是用户，即 is-a user。这个表属于所有用户的基本信息，其他不同类型的用户有自己专属的表，然后用用户ID关联回这个表。这样做还有一个好处，那就是其他表中的用户ID都统一关联回这个表，这样用户ID就不会有歧义了。';
+) ENGINE=InnoDB AUTO_INCREMENT=311983427693843185 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='用户有很多类型，比如一种分类方法是把用户分成个人用户和企业用户，而不同类型的用户需要的字段不一样，但是他们都是用户，即 is-a user。这个表属于所有用户的基本信息，其他不同类型的用户有自己专属的表，然后用用户ID关联回这个表。这样做还有一个好处，那就是其他表中的用户ID都统一关联回这个表，这样用户ID就不会有歧义了。';
 
 CREATE TABLE IF NOT EXISTS `user_account` (
                                             `user_account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -280,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `user_account` (
                                             PRIMARY KEY (`user_account_id`),
                                             UNIQUE KEY `user_id` (`user_id`),
                                             UNIQUE KEY `idx_username` (`username`,`is_deleted`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416242397290105 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户账号信息，适用各种类型的用户';
+) ENGINE=InnoDB AUTO_INCREMENT=311983427597375571 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='用户账号信息，适用各种类型的用户';
 
 CREATE TABLE IF NOT EXISTS `user_email` (
                                           `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -297,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `user_email` (
                                           PRIMARY KEY (`id`),
                                           UNIQUE KEY `idx_unique` (`email_id`,`use`,`is_deleted`),
                                           KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198697057 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户的email';
+) ENGINE=InnoDB AUTO_INCREMENT=311983418789337161 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='用户的email';
 
 CREATE TABLE IF NOT EXISTS `user_phone` (
                                           `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -314,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `user_phone` (
                                           PRIMARY KEY (`id`),
                                           UNIQUE KEY `idx_unique` (`phone_id`,`use`,`is_deleted`),
                                           KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306416293198698057 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户的电话';
+) ENGINE=InnoDB AUTO_INCREMENT=311983418789338161 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='用户的电话';
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

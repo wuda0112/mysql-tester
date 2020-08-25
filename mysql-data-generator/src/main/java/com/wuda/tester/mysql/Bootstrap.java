@@ -42,5 +42,6 @@ public class Bootstrap {
         // 全量数据生成器
         DataGenerator generator = new FoundationBasedDataGenerator(cliArgs, dataSource);
         generator.startup();
+        System.out.println("---------数据生成正在进行中......---------");
     }
 }

@@ -19,6 +19,17 @@
 
 java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-password=密码
 ```
+```
+5. 每隔一分钟会输出每个表生成的数据量，比如以下输出，表示STORE表生成了24500条记录
+```
+```
+        STORE=24500
+        USER=24500
+        ITEM_GENERAL=123145
+        USER_PHONE=24500
+        ITEM_DESCRIPTION=123145
+        ITEM=123145
+```
 
 # clone项目
 ```aidl

@@ -15,7 +15,7 @@
 
     <properties>
         <jooq.version>3.13.2</jooq.version>
-        <foundation.version>1.0.2-SNAPSHOT</foundation.version>
+        <foundation.version>1.0.2</foundation.version>
     </properties>
 
     <dependencies>

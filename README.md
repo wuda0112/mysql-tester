@@ -10,7 +10,7 @@
 - [jar下载](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
-3. 生成数据库表,SQL文件和【相应版本的JAR在同一个地方下载】
+3. 创建数据库表,SQL文件和【相应版本的JAR在同一个地方下载】
 ```
 - [mysql_tester.sql 脚步文件](https://github.com/wuda0112/mysql-tester/releases/)
 

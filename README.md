@@ -12,7 +12,7 @@
 ```
 3. 生成数据库表,SQL文件和【相应版本的JAR在同一个地方下载】
 ```
-- [Create Table 脚本文件](https://github.com/wuda0112/mysql-tester/releases/)
+- [mysql_tester.sql 脚步文件](https://github.com/wuda0112/mysql-tester/releases/)
 
 ```
 4. 输入命令，启动。默认连接到本地mysql，即: localhost:3306，最简单的就是
@@ -21,7 +21,6 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 ```
 
 # clone项目
-##### 重要：如果你不是下载jar包生成数据，而是clone本项目代码,需要了解master分支的代码使用了我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)，该项目还在持续开发中（即将发布正式版本），还没上传到Maven中心仓库，所以需要先把该项目clone下来,mvn clean install到你本地仓库中
 ```aidl
 1. 启动类: com.wuda.tester.mysql.Bootstrap
 2. 启动之前必须配置 --mysql-username 和　--mysql-password　两个args，默认连接到本地mysql数据库,比如对于IDEA开发工具，
@@ -36,7 +35,7 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
 # 数据库表
 不同的版本，所使用的表可能不一样，因为一直在增加更多的表。越高的版本，所使用的表的数量越多，已经发布的版本所使用的表，请查看对应版本的SQL文件
 
-## 正在开发中的master分支所使用的表，如下
+## 最新发布版本所使用的表，如下
 数据库表选自于我的另外一个中台项目[**foundation**](https://github.com/wuda0112/foundation)
 ### foundation_user
 - - user,用户表
@@ -69,13 +68,13 @@ java -jar mysql-tester-${VERSION}.jar --mysql-username=用户名 --mysql-passwor
                                    每个用户最多有多少商品数;在生成数据时,随机为每个用户生成商品,数量取值范围是
                                    [0,MAX](default=10).比如默认生成10000个用户,每个用户
                                    最多10个商品,那么大致就可以知道生成的数据规模
-    --mysql-max-connection <arg>   mysql最大连接数(default=25)
+    --mysql-max-connection <arg>   mysql最大连接数(default=25)，不是越大越好
     --mysql-password <arg>         mysql password
     --mysql-url <arg>
                                    mysql连接url(default=jdbc:mysql://localho
                                    st:3306/?serverTimezone=UTC)
     --mysql-username <arg>         mysql username
-    --thread <thread>              生成数据的线程数(default=50)
+    --thread <thread>              生成数据的线程数(default=50)，不是越大越好
     --user-count <arg>
                                    用户表生成多少行记录,同时也是店铺表和仓库表的记录数,因为一个用户只拥有一个店
                                    铺和一个仓库(default=10000),当生成的记录数达到该值时,数据生成
